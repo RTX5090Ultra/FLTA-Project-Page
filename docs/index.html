@@ -19,6 +19,12 @@
         <nav class="paper-links" aria-label="Project links">
           <a href="https://anonymous.4open.science/r/FLTA-Anonymous-1CE9/README.md" target="_blank" rel="noreferrer">Code</a>
         </nav>
+        <nav class="section-nav" aria-label="Page sections">
+          <a href="#abstract">Abstract</a>
+          <a href="#results">Simulation results</a>
+          <a href="#real-robot">Real-robot results</a>
+          <a href="#videos">Real-robot videos</a>
+        </nav>
       </section>
 
       <section class="section figure-section" aria-labelledby="framework-title">
@@ -26,7 +32,7 @@
           <img src="assets/images/figure_2.png" alt="Overview of FLTA with frame discrimination, a global progress prior, and a local temporal order prior" />
           <figcaption id="framework-title">
             <strong>Figure 2.</strong> Overview of the proposed temporal alignment framework. Only the
-            normalization-affine parameters of the visual backbone are updated. The global progress prior
+            normalization-affine parameters of the visual encoder are updated. The global progress prior
             <em>D</em> and visual similarity construct soft correspondences, while the local temporal order
             prior <em>Q</em> discourages backward transitions and permits variable forward rates.
           </figcaption>
@@ -37,23 +43,21 @@
         <div class="section-label">Paper overview</div>
         <h2 id="abstract-title">Abstract</h2>
         <p>
-          Transferring visual representations pretrained on human videos to robot manipulation requires learning reliable correspondences between human and robot demonstrations. However, paired demonstrations can differ in execution rate and in the proportion of non-key frames that do not directly reflect task progress. Frames at the same relative timestamp may therefore represent different task stages, making correspondence learning failed. To address these issues, we propose Frame-Level Temporal Alignment (\textbf{FLTA}), a framework that uses two temporal priors to adapt visual encoders pretrained on human videos for robot manipulation. It learns shared task-progress representations without frame-level correspondence annotations, allowing frames at different relative temporal positions to match. A global progress prior combines normalized temporal positions with visual similarity to construct a soft correspondence target. A local temporal order prior penalizes backward transitions while allowing stays and varying forward rates to accommodate execution-rate differences. With ResNet-50 and ViT encoders, our method achieves relative improvements of $46.93\%$ and $65.96\%$, respectively, over the best baselines in average simulation success rates and achieves higher task success rates on real-world manipulation tasks. These results also suggest that effective human--robot adaptation depends less on the number of parameters updated than on which parameters are selected.
+          Transferring visual representations pretrained on human videos to robot manipulation requires learning reliable correspondences between human and robot demonstrations. However, paired demonstrations can differ in execution rate and in the proportion of non-key frames that do not directly reflect task progress. Frames at the same relative timestamp may therefore represent different task stages, making correspondence learning failed. To address these issues, we propose Frame-Level Temporal Alignment (<strong>FLTA</strong>), a framework that uses two temporal priors to adapt visual encoders pretrained on human videos for robot manipulation. It learns shared task-progress representations without frame-level correspondence annotations, allowing frames at different relative temporal positions to match. A global progress prior combines normalized temporal positions with visual similarity to construct a soft correspondence target. A local temporal order prior penalizes backward transitions while allowing stays and varying forward rates to accommodate execution-rate differences. With ResNet-50 and ViT encoders, our method achieves relative improvements of 46.93% and 65.96%, respectively, over the best baselines in average simulation success rates and achieves higher task success rates on real-world manipulation tasks. These results also suggest that effective human--robot adaptation depends less on the number of parameters updated than on which parameters are selected.
         </p>
       </section>
 
       <section class="section results-section" id="results" aria-labelledby="results-title">
         <div class="section-intro">
           <div>
-            <div class="section-label">Downstream evaluation</div>
-            <h2 id="results-title">Downstream task results</h2>
+            <div class="section-label">01 / Simulation</div>
+            <h2 id="results-title">Zero-shot manipulation</h2>
           </div>
           <p>
-            Frozen FLTA backbones are transferred to RVT2-lite for zero-shot simulation and to ACT for
-            physical robot evaluation.
+            Visual encoders are evaluated through downstream RVT2 policies on 23 unseen AGNOSTOS tasks.
           </p>
         </div>
 
-        <div class="result-grid">
           <article class="result-card">
             <div class="result-card-heading">
               <p class="table-kicker">Simulation</p>
@@ -63,7 +67,7 @@
             <div class="table-scroll" role="region" aria-label="AGNOSTOS simulation results" tabindex="0">
               <table>
                 <thead>
-                  <tr><th>Backbone</th><th>Method</th><th>L1 ↑</th><th>L2 ↑</th><th>Avg. ↑</th></tr>
+                  <tr><th>Visual encoder</th><th>Method</th><th>L1 ↑</th><th>L2 ↑</th><th>Avg. ↑</th></tr>
                 </thead>
                 <tbody>
                   <tr><td rowspan="3" class="group">D4R-ViT</td><td>Frozen</td><td>8.31 <span>(0.50)</span></td><td>11.60 <span>(0.33)</span></td><td>9.74 <span>(0.25)</span></td></tr>
@@ -72,12 +76,27 @@
                   <tr class="group-start"><td rowspan="3" class="group">R3M-RN50</td><td>Frozen</td><td>12.62 <span>(0.25)</span></td><td>11.73 <span>(0.50)</span></td><td>12.23 <span>(0.36)</span></td></tr>
                   <tr><td>+ HRAlign</td><td>11.59 <span>(1.62)</span></td><td>12.80 <span>(0.33)</span></td><td>12.12 <span>(0.78)</span></td></tr>
                   <tr class="ours"><td>+ Ours</td><td>16.82 <span>(1.24)</span></td><td>19.47 <span>(0.19)</span></td><td>17.97 <span>(0.67)</span></td></tr>
+                  <tr class="group-start"><td rowspan="3" class="group">DecisionNCE-CLIP</td><td>Frozen</td><td>10.05 <span>(1.24)</span></td><td>9.73 <span>(1.32)</span></td><td>9.91 <span>(1.14)</span></td></tr>
+                  <tr><td>+ HRAlign<sup>*</sup></td><td>12.62 <span>(2.06)</span></td><td>9.47 <span>(1.05)</span></td><td>11.25 <span>(1.58)</span></td></tr>
+                  <tr class="ours"><td>+ Ours</td><td>15.38 <span>(0.44)</span></td><td>16.13 <span>(1.00)</span></td><td>15.71 <span>(0.22)</span></td></tr>
+                  <tr class="group-start"><td rowspan="3" class="group">AcTOL-CLIP</td><td>Frozen</td><td>11.28 <span>(1.53)</span></td><td>11.47 <span>(0.19)</span></td><td>11.36 <span>(0.82)</span></td></tr>
+                  <tr><td>+ HRAlign<sup>*</sup></td><td>11.90 <span>(1.47)</span></td><td>12.27 <span>(0.19)</span></td><td>12.06 <span>(0.78)</span></td></tr>
+                  <tr class="ours"><td>+ Ours</td><td>13.23 <span>(0.75)</span></td><td>21.73 <span>(0.50)</span></td><td>16.93 <span>(0.64)</span></td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="table-note">23 zero-shot tasks: 13 Level-1 and 10 Level-2 tasks.</p>
+            <p class="table-note">23 zero-shot tasks: 13 Level-1 and 10 Level-2 tasks. <sup>*</sup> Reproduced.<br>For DecisionNCE-CLIP and AcTOL-CLIP, Frozen and HRAlign use RVT2-full, while Ours uses RVT2-lite.</p>
           </article>
+      </section>
 
+      <section class="section real-section" id="real-robot" aria-labelledby="real-title">
+        <div class="section-intro">
+          <div>
+            <div class="section-label">02 / Real robot</div>
+            <h2 id="real-title">Physical manipulation</h2>
+          </div>
+          <p>FLTA representations are transferred to ACT for four manipulation tasks on the Trossen WidowX AI.</p>
+        </div>
           <article class="result-card">
             <div class="result-card-heading">
               <p class="table-kicker">Real robot</p>
@@ -85,9 +104,9 @@
               <p>Success rate (%) over 20 evaluation episodes per task.</p>
             </div>
             <div class="table-scroll" role="region" aria-label="Real robot results" tabindex="0">
-              <table>
+              <table class="real-results-table">
                 <thead>
-                  <tr><th>Method</th><th>Pick</th><th>Press</th><th>Push</th><th>Open</th><th>Avg. ↑</th></tr>
+                  <tr><th>Method</th><th>Pick Carrot into Pot</th><th>Press Button</th><th>Push Pot into Marked Region</th><th>Open Pot by Lifting the Lid</th><th>Avg. ↑</th></tr>
                 </thead>
                 <tbody>
                   <tr><td>Frozen</td><td>35</td><td>25</td><td>55</td><td>0</td><td>28.75</td></tr>
@@ -98,21 +117,16 @@
             </div>
             <p class="table-note">Four tasks with 40 training demonstrations per task.</p>
           </article>
-        </div>
-      </section>
 
-      <section class="section videos-section" id="videos" aria-labelledby="videos-title">
+      <section class="videos-section" id="videos" aria-labelledby="videos-title">
         <div class="section-intro">
           <div>
             <div class="section-label">Policy rollouts</div>
             <h2 id="videos-title">Real-robot videos</h2>
           </div>
-          <p>
-            Representative successful and failed rollouts. Simulation rollouts will be added after the final
-            video selection.
-          </p>
         </div>
         <div class="real-grid" id="real-grid"></div>
+      </section>
       </section>
     </main>
 

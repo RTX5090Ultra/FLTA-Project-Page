@@ -1,11 +1,11 @@
 const realTasks = [
   {
-    title: "Pick carrot into pot",
+    title: "Pick Carrot into Pot",
     skill: "Pick-and-place",
     clips: { success: "assets/videos/real/pick_place_success.m4v" },
   },
   {
-    title: "Press button",
+    title: "Press Button",
     skill: "Contact-rich actuation",
     clips: {
       success: "assets/videos/real/press_button_success.m4v",
@@ -13,7 +13,7 @@ const realTasks = [
     },
   },
   {
-    title: "Push pot into marked region",
+    title: "Push Pot into Marked Region",
     skill: "Goal-directed pushing",
     clips: {
       success: "assets/videos/real/push_pot_success_1.m4v",
@@ -21,7 +21,7 @@ const realTasks = [
     },
   },
   {
-    title: "Open pot by lifting the lid",
+    title: "Open Pot by Lifting the Lid",
     skill: "Grasp-and-lift",
     clips: {
       success: "assets/videos/real/open_lid_success.m4v",
